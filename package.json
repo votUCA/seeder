@@ -1,0 +1,66 @@
+{
+  "name": "@votuca/seeder",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": {
+    "name": "Carlos Rodrigo Sanabria Flores",
+    "email": "rodrigosanabria22@opinno.com"
+  },
+  "config": {
+    "image": "docker.pkg.github.com/votuca/seeder/seeder"
+  },
+  "scripts": {
+    "docker:build": "cross-conf-env docker image build . -t $npm_package_config_image:$npm_package_version",
+    "predocker:tag": "yarn docker:build",
+    "docker:tag": " cross-conf-env docker image tag $npm_package_config_image:$npm_package_version $npm_package_config_image:latest",
+    "predocker:push": "yarn docker:tag",
+    "docker:push": "cross-conf-env docker push $npm_package_config_image:$npm_package_version"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "faker": "^4.1.0",
+    "mongo-seeding": "^3.4.0-alpha.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/faker": "^4.1.8",
+    "@types/mongodb": "^3.3.12",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "cross-conf-env": "^1.1.2",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.3"
+  },
+  "engines": {
+    "node": ">=10.x.x",
+    "yarn": ">=1.12.x"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.+(ts|tsx)": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.+(json|less|md|yml)": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
