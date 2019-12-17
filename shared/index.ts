@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb'
 import faker = require('faker/locale/en_US')
 
 const collections: { [key: string]: ObjectId[] } = {}
+export const uidFormats = ['u########', 'ux#######', 'uy#######', 'uz#######']
 
 export const getDocumentId = (collection: string) => {
   if (collection in collections) {

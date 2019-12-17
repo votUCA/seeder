@@ -1,8 +1,6 @@
-import { getDocumentId } from '../../shared'
+import { getDocumentId, uidFormats } from '../../shared'
 import faker = require('faker/locale/en_US')
 import bcrypt = require('bcryptjs')
-
-const uidFormats = ['u########', 'ux#######', 'uy#######', 'uz#######']
 
 type Roles = 'ADMIN' | 'SECRETARY'
 
