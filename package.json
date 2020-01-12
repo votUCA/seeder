@@ -19,7 +19,8 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "faker": "^4.1.0",
-    "mongo-seeding": "^3.4.0-alpha.1"
+    "mongo-seeding": "^3.4.0-alpha.1",
+    "ts-node": "^8.6.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
@@ -29,6 +30,7 @@
     "@types/mongodb": "^3.3.12",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
+    "axios": "^0.19.1",
     "cross-conf-env": "^1.1.2",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
@@ -38,6 +40,8 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "form-data": "^3.0.0",
+    "graphql-request": "^1.8.2",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
