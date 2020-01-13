@@ -129,7 +129,7 @@ async function main () {
     }
   }
 
-  const createElectionBoolean = false
+  const createElectionBoolean = true
   if (createElectionBoolean) {
     for (let i = 0; i < 1; i++) {
       const numCandidates = faker.random.number(5) + 1
@@ -138,7 +138,6 @@ async function main () {
           description: faker.lorem.paragraph(1),
           start: new Date().toISOString(),
           end: new Date('01/20/2020').toISOString(),
-          isVoteRectify: false,
           delegates: [],
           candidates: new Array(faker.random.number(5) + 1)
             .fill(null)
