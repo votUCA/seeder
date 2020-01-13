@@ -1,7 +1,22 @@
 import { GraphQLClient, request } from 'graphql-request'
 import faker = require('faker/locale/en_US')
 
-async function main () {
+function randombetween(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+function generate(max: number, thecount: number) {
+  const r = []
+  let currsum = 0
+  for (let i = 0; i < thecount - 1; i++) {
+    r[i] = randombetween(1, max - (thecount - i - 1) - currsum)
+    currsum += r[i]
+  }
+  r[thecount - 1] = max - currsum
+  return r
+}
+
+async function main() {
   const endpoint = 'http://localhost:9998/graphql'
 
   const loginQuery = /* GraphQL */ `
@@ -36,12 +51,12 @@ async function main () {
     }
   `
   const pedingPolls = /* GraphQL */ `
-  mutation poll($input: PollInput!) {
-    createPoll(input: $input) {
-      start
-      end
+    mutation poll($input: PollInput!) {
+      createPoll(input: $input) {
+        start
+        end
+      }
     }
-  }
   `
   const createUser = /* GraphQL */ `
     mutation createUser($input: UserInput!) {
@@ -71,7 +86,15 @@ async function main () {
   const groups = ['PDVP', 'PNDVP', 'PDINVP', 'PAS', 'ALU']
   const locations = ['JEREZ', 'PUERTOREAL', 'CASEM', 'CADIZ', 'ALGECIRAS']
   const usersQuery = /* GraphQL */ `
-    query users {users{uid firstName lastName dni}}`
+    query users {
+      users {
+        uid
+        firstName
+        lastName
+        dni
+      }
+    }
+  `
   const users = await graphQLClient.request(usersQuery)
 
   const createPollBoolean = true
@@ -84,15 +107,22 @@ async function main () {
           end: new Date('01/20/2020').toISOString(),
           isVoteRectify: false,
           delegates: [],
-          censuses: locations.map((location) => groups.map(group => ({
-            group,
-            location,
-            date: new Date().toISOString(),
-            voters: new Array(faker.random.number(10) + 1).fill(null).map(() => faker.random.arrayElement(users.users))
-          }))).reduce((prev, current) => [...prev, ...current]),
+          censuses: locations
+            .map(location =>
+              groups.map(group => ({
+                group,
+                location,
+                date: new Date().toISOString(),
+                voters: new Array(faker.random.number(10) + 1)
+                  .fill(null)
+                  .map(() => faker.random.arrayElement(users.users))
+              }))
+            )
+            .reduce((prev, current) => [...prev, ...current]),
           question: faker.lorem.sentence(20),
-          options: new Array(faker.random.number(5) + 2).fill(null).map(() =>
-            faker.lorem.sentence(20)),
+          options: new Array(faker.random.number(5) + 2)
+            .fill(null)
+            .map(() => faker.lorem.sentence(20)),
           isRealTime: faker.random.boolean()
         }
       })
@@ -110,17 +140,25 @@ async function main () {
           end: new Date('01/20/2020').toISOString(),
           isVoteRectify: false,
           delegates: [],
-          candidates: new Array(faker.random.number(5) + 1).fill(null).map(() => ({
-            firstName: faker.name.firstName(),
-            lastName: faker.name.lastName(),
-            about: faker.lorem.paragraph(20)
-          })),
-          censuses: locations.map((location) => groups.map(group => ({
-            group,
-            location,
-            date: new Date().toISOString(),
-            voters: new Array(faker.random.number(10) + 1).fill(null).map(() => faker.random.arrayElement(users.users))
-          }))).reduce((prev, current) => [...prev, ...current])
+          candidates: new Array(faker.random.number(5) + 1)
+            .fill(null)
+            .map(() => ({
+              firstName: faker.name.firstName(),
+              lastName: faker.name.lastName(),
+              about: faker.lorem.paragraph(20)
+            })),
+          censuses: locations
+            .map(location =>
+              groups.map(group => ({
+                group,
+                location,
+                date: new Date().toISOString(),
+                voters: new Array(faker.random.number(10) + 1)
+                  .fill(null)
+                  .map(() => faker.random.arrayElement(users.users))
+              }))
+            )
+            .reduce((prev, current) => [...prev, ...current])
         }
       })
       console.log(JSON.stringify(result, undefined, 2))
