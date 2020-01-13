@@ -1,11 +1,11 @@
 import { GraphQLClient, request } from 'graphql-request'
 import faker = require('faker/locale/en_US')
 
-function randombetween(min: number, max: number) {
+function randombetween (min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function generate(max: number, thecount: number) {
+function generate (max: number, thecount: number) {
   const r = []
   let currsum = 0
   for (let i = 0; i < thecount - 1; i++) {
@@ -16,7 +16,7 @@ function generate(max: number, thecount: number) {
   return r
 }
 
-async function main() {
+async function main () {
   const endpoint = 'http://localhost:9998/graphql'
 
   const loginQuery = /* GraphQL */ `
@@ -99,13 +99,12 @@ async function main() {
 
   const createPollBoolean = true
   if (createPollBoolean) {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 1; i++) {
       const result = await graphQLClient.request(pedingPolls, {
         input: {
-          description: faker.lorem.paragraph(100),
+          description: faker.lorem.paragraph(15),
           start: new Date().toISOString(),
           end: new Date('01/20/2020').toISOString(),
-          isVoteRectify: false,
           delegates: [],
           censuses: locations
             .map(location =>
@@ -119,10 +118,10 @@ async function main() {
               }))
             )
             .reduce((prev, current) => [...prev, ...current]),
-          question: faker.lorem.sentence(20),
+          question: faker.lorem.sentence(10),
           options: new Array(faker.random.number(5) + 2)
             .fill(null)
-            .map(() => faker.lorem.sentence(20)),
+            .map(() => faker.lorem.sentence(10)),
           isRealTime: faker.random.boolean()
         }
       })
@@ -132,10 +131,11 @@ async function main() {
 
   const createElectionBoolean = false
   if (createElectionBoolean) {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 1; i++) {
+      const numCandidates = faker.random.number(5) + 1
       const result = await graphQLClient.request(pedingElections, {
         input: {
-          description: faker.lorem.paragraph(100),
+          description: faker.lorem.paragraph(15),
           start: new Date().toISOString(),
           end: new Date('01/20/2020').toISOString(),
           isVoteRectify: false,
@@ -145,7 +145,7 @@ async function main() {
             .map(() => ({
               firstName: faker.name.firstName(),
               lastName: faker.name.lastName(),
-              about: faker.lorem.paragraph(20)
+              about: faker.lorem.paragraph(10)
             })),
           censuses: locations
             .map(location =>
@@ -158,7 +158,12 @@ async function main() {
                   .map(() => faker.random.arrayElement(users.users))
               }))
             )
-            .reduce((prev, current) => [...prev, ...current])
+            .reduce((prev, current) => [...prev, ...current]),
+          maxVotes: faker.random.number(numCandidates) + 1,
+          voteWeights: generate(100, groups.length).map((weight, index) => ({
+            weight,
+            group: groups[index]
+          }))
         }
       })
       console.log(JSON.stringify(result, undefined, 2))
