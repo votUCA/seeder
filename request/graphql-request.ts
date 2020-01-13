@@ -102,7 +102,7 @@ async function main () {
     for (let i = 0; i < 1; i++) {
       const result = await graphQLClient.request(pedingPolls, {
         input: {
-          description: faker.lorem.paragraph(15),
+          description: faker.lorem.paragraph(1),
           start: new Date().toISOString(),
           end: new Date('01/20/2020').toISOString(),
           delegates: [],
@@ -135,7 +135,7 @@ async function main () {
       const numCandidates = faker.random.number(5) + 1
       const result = await graphQLClient.request(pedingElections, {
         input: {
-          description: faker.lorem.paragraph(15),
+          description: faker.lorem.paragraph(1),
           start: new Date().toISOString(),
           end: new Date('01/20/2020').toISOString(),
           isVoteRectify: false,
